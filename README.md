@@ -10,39 +10,34 @@ This role installs NGINX Open Source, NGINX Plus, or the NGINX Amplify agent on 
 
 **Note:** This role is still in active development. There may be unidentified issues and the role variables may change as development continues.
 
-**Deprecation Warnings:**
-
-With the advent of Ansible collections and the release of the [NGINX Core Ansible collection](https://github.com/nginxinc/ansible-collection-nginx), the decision has been made to split this role into three smaller roles and reduce the overhead of this role:
-*   The NGINX Ansible role will keep working as is and be used to install and setup NGINX.
-*   **The NGINX configuration functionalities included in this role have been removed as of release 0.19.0.** There now is a separate role to manage and create NGINX configurations available [here](https://github.com/nginxinc/ansible-role-nginx-config). Any new issues or PRs related to configuring NGINX should be submitted in the new NGINX configuration Ansible role repository. New issues or PRs related to configuring NGINX submitted in this repository will not be worked on. This disclaimer will be removed in the upcoming `0.21.0` release at some stage after July 2021.
-*   **The NGINX Unit functionalities included in this role have been removed as of release 0.18.0.** There now is a separate role to install NGINX Unit available [here](https://github.com/nginxinc/ansible-role-nginx-unit). Any new issues or PRs related to NGINX Unit should be submitted in the new NGINX Unit Ansible role repository. New issues or PRs related to NGINX Unit submitted in this repository will not be worked on. This disclaimer will be removed in the upcoming `0.21.0` release at some stage after July 2021.
-
 ## Requirements
 
 ### Ansible
 
-*   This role is developed and tested with [maintained](https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html) versions of Ansible core (above `2.11`) and Ansible (above `2.9.10`).
-*   When using Ansible base, you will also need to install the following collections:
+* This role is developed and tested with [maintained](https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html) versions of Ansible core (above `2.11`) and Ansible (above `2.9.10`).
+* When using Ansible base, you will also need to install the following collections:
+
     ```yaml
     ---
     collections:
       - name: community.general
-        version: 3.2.0
+        version: 3.7.0
       - name: ansible.posix
-        version: 1.2.0
+        version: 1.3.0
     ```
+
     **Note:** You can alternatively install the Ansible community distribution (what is known as the "old" Ansible) if you don't want to manage individual collections.
-*   Instructions on how to install Ansible can be found in the [Ansible website](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#upgrading-ansible-from-version-2-9-and-older-to-version-2-10-or-later).
+* Instructions on how to install Ansible can be found in the [Ansible website](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#upgrading-ansible-from-version-2-9-and-older-to-version-2-10-or-later).
 
 ### Jinja2
 
-*   This role uses Jinja2 templates. Ansible base installs Jinja2 by default, but depending on your install and/or upgrade path, you might be running an outdated version of Jinja2. The minimum version of Jinja2 required for the role to properly function is `2.11`.
-*   Instructions on how to install Jinja2 can be found in the [Jinja2 website](https://jinja.palletsprojects.com/en/2.11.x/intro/#installation).
+* This role uses Jinja2 templates. Ansible base installs Jinja2 by default, but depending on your install and/or upgrade path, you might be running an outdated version of Jinja2. The minimum version of Jinja2 required for the role to properly function is `2.11`.
+* Instructions on how to install Jinja2 can be found in the [Jinja2 website](https://jinja.palletsprojects.com/en/2.11.x/intro/#installation).
 
 ### Molecule
 
-*   Molecule is used to test the various functionalities of the role. The recommended version of Molecule to test this role is `3.3`.
-*   Instructions on how to install Molecule can be found in the [Molecule website](https://molecule.readthedocs.io/en/latest/installation.html).
+* Molecule is used to test the various functionalities of the role. The recommended version of Molecule to test this role is `3.3`.
+* Instructions on how to install Molecule can be found in the [Molecule website](https://molecule.readthedocs.io/en/latest/installation.html).
 
 ## Installation
 
@@ -62,15 +57,18 @@ The NGINX Ansible role supports all platforms supported by [NGINX Open Source](h
 
 ```yaml
 Alpine:
-  - 3.10
   - 3.11
   - 3.12
   - 3.13
+  - 3.14
+Amazon Linux:
+  - 2
 CentOS:
   - 7.4+
   - 8
 Debian:
   - buster
+  - bullseye
 Red Hat:
   - 7.4+
   - 8
@@ -78,10 +76,9 @@ SUSE/SLES:
   - 12
   - 15
 Ubuntu:
-  - xenial
   - bionic
   - focal
-  - groovy
+  - hirsute
 ```
 
 ### NGINX Plus
@@ -147,14 +144,16 @@ This role has multiple variables. The descriptions and defaults for all these va
 |----|-----------|
 |**[`main.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/main.yml)**|NGINX installation variables|
 |**[`amplify.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/amplify.yml)**|NGINX Amplify agent installation variables|
-|**[`linux.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/linux.yml)**|Linux installation variables|
 |**[`bsd.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/bsd.yml)**|BSD installation variables|
+|**[`logrotate.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/logrotate.yml)**|Logrotate configuration variables|
+|**[`selinux.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/selinux.yml)**|SELinux configuration variables|
+|**[`systemd.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/defaults/main/systemd.yml)**|Systemd configuration variables|
 
 Similarly, descriptions and defaults for preset variables can be found in the **[`vars/`](https://github.com/nginxinc/ansible-role-nginx/blob/main/vars/)** folder in the following files:
 
 |Name|Description|
 |----|-----------|
-|**[`main.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/vars/main.yml)**|List of supported NGINX platforms and modules|
+|**[`main.yml`](https://github.com/nginxinc/ansible-role-nginx/blob/main/vars/main.yml)**|List of supported NGINX platforms, modules, and Linux installation variables|
 
 ## Example Playbooks
 
