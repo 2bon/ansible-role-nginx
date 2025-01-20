@@ -1,17 +1,7 @@
 ---
 - name: (Debian/Ubuntu) Add NGINX Amplify agent repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     filename: nginx-amplify
-    repo: "deb [arch=amd64] https://packages.amplify.nginx.com/{{ ansible_facts['distribution'] | lower }}/
-          {{ ansible_facts['distribution_release'] | lower }} amplify-agent"
+    repo: deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://packages.amplify.nginx.com/py3/{{ ansible_facts['distribution'] | lower }} {{ ansible_facts['distribution_release'] | lower }} amplify-agent
     update_cache: true
-    mode: 0644
-  when: ansible_facts['distribution_release'] != "focal"
-
-- name: (Ubuntu 20.04) Add NGINX Amplify agent repository
-  apt_repository:
-    filename: nginx-amplify
-    repo: deb [arch=amd64] https://packages.amplify.nginx.com/py3/ubuntu focal amplify-agent
-    update_cache: true
-    mode: 0644
-  when: ansible_facts['distribution_release'] == "focal"
+    mode: "0644"
